@@ -1,16 +1,17 @@
 import Link from 'next/link'
 import Head from '../components/head'
 import Nav from '../components/nav'
-import { Grommet } from 'grommet'
 import React from 'react'
+import { Grommet } from 'grommet'
+import theme from '@zooniverse/grommet-theme'
 
 export default () => (
-  <Grommet>
+  <Grommet theme={theme}>
     <Head title="Home" />
     <Nav />
 
     <div>
-      Index
+      Home
     </div>
   </Grommet>
 )

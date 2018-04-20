@@ -24,6 +24,26 @@ class MyComponent extends React.Component {
 
 ```
 
+### Setting the base font size
+
+This theme uses rems for sizing, based on a document font size of `10px`.
+
+In a server-side rendered app, the font size declaration needs to be made within the app, or it won't be picked up when generating the style sheet on the server. This causes a noticeable font size change once the styles are generated on the client.
+
+**To avoid this, you must set the `html` element font size to `10px` in your app**, e.g. (using styled components):
+
+```js
+
+import { injectGlobal } from 'styled-components';
+
+injectGlobal`
+  html {
+    font-size: 62.5%; // calculated from the normal default size of 16px
+  }
+`;
+
+```
+
 ## License
 
 Copyright 2018 Zooniverse

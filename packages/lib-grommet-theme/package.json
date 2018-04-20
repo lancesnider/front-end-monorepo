@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "neutrino build",
-    "lint": "neutrino lint"
+    "lint": "neutrino lint",
+    "start": "nodemon --watch src --exec 'npm run build'"
   },
   "author": "Roger Hutchings <roger@zooniverse.org> (https://www.zooniverse.org/)",
   "license": "Apache-2.0",
@@ -13,7 +14,9 @@
     "grommet": "^2.0.0-beta.1"
   },
   "dependencies": {
-    "deep-freeze": "0.0.1"
+    "deep-freeze": "0.0.1",
+    "react": "^16.3.2",
+    "styled-components": "^3.2.6"
   },
   "publishConfig": {
     "access": "public"
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@neutrinojs/airbnb-base": "^8.2.2",
     "@neutrinojs/library": "^8.2.2",
-    "neutrino": "^8.2.2"
+    "neutrino": "^8.2.2",
+    "nodemon": "^1.17.3"
   }
 }
