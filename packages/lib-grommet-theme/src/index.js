@@ -4,6 +4,7 @@ import global from './global';
 import anchor from './Anchor';
 import box from './Box';
 import grommet from './Grommet';
+import heading from './Heading';
 import text from './Text';
 
 export default deepFreeze({
@@ -11,5 +12,6 @@ export default deepFreeze({
   anchor,
   box,
   grommet,
+  heading,
   text,
 });

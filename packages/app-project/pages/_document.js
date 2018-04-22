@@ -9,6 +9,9 @@ injectGlobal`
     font-size: 1.4rem;
     line-height: 1.214285714;
   }
+  p {
+    margin: 0;
+  }
 `
 
 export default class MyDocument extends Document {

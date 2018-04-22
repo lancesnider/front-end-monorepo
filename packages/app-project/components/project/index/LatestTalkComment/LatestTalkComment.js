@@ -1,18 +1,42 @@
 import counterpart from 'counterpart'
-import { Anchor, Box, Heading } from 'grommet'
+import { Anchor, Box, Heading, Text } from 'grommet'
 import React from 'react'
+import styled from 'styled-components'
+import CommentMeta from './components/CommentMeta'
+import ContentBox from '../ContentBox'
 import en from './locales/en'
-import CommentMeta from './CommentMeta'
 
 counterpart.registerTranslations('en', en)
 
+const CommentBody = styled(Text)`
+  line-height: 1.57143;
+`
+
+const CommentDate = styled(Text)`
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+`
+
 const LatestTalkComment = ({ comment }) => (
-  <Box
-    border={{ color: 'lightGrey' }}
-    pad="large"
+  <ContentBox
+    linkText={counterpart('LatestTalkComment.viewLink')}
+    linkUrl={'#'}
+    title={counterpart('LatestTalkComment.title')}
   >
 
-    <Box direction="row" gap="large">
+    <Heading
+      color="darkGrey"
+      level="4"
+      margin={{ bottom: 'medium', top: 'none' }}
+    >
+      {comment.title}
+    </Heading>
+
+    <Box
+      direction="row-responsive"
+      gap="large"
+      margin={{ bottom: 'large', top: 'none' }}
+    >
       <CommentMeta
         title={counterpart('LatestTalkComment.postedBy')}
         text={comment.author.name}
@@ -25,7 +49,14 @@ const LatestTalkComment = ({ comment }) => (
       />
     </Box>
 
-  </Box>
+    <CommentBody tag="p">
+      <CommentDate color="darkTeal" margin={{ right: 'medium' }}>
+        18 Nov.
+      </CommentDate>
+      Maecenas semper fringilla rutrum ipsum mattis posuere, mollis morbi donec fusce lobortis sapien, ante magna aenean urna himenaeos. Ipsum cum quam euismod ultrices aliquam porttitor massa suspendisse class, faucibus torquent vestibulum per sit augue nullam ut velit, hendrerit vel molestie enim sollicitudin eros integer vitae.
+    </CommentBody>
+
+  </ContentBox>
 )
 
 LatestTalkComment.defaultProps = {
@@ -38,6 +69,7 @@ LatestTalkComment.defaultProps = {
       name: 'Board',
       link: '/board',
     },
+    title: 'New Comment'
   }
 }
 
