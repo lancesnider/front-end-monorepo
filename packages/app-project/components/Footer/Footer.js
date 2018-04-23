@@ -1,8 +1,10 @@
 import counterpart from 'counterpart'
-import { Anchor, Box } from 'grommet'
+import { Anchor, Box, Grid } from 'grommet'
 import React from 'react'
 import styled from 'styled-components'
 import en from './locales/en'
+import LinkBox from './components/LinkBox'
+import links from './links'
 
 const StyledAnchor = styled(Anchor)`
   font-weight: bold;
@@ -25,7 +27,7 @@ const Footer = () => {
         <Box
           direction="row-responsive"
           justify="between"
-          margin={{ bottom: 'xlarge' }}
+          margin={{ bottom: 'large' }}
         >
           <div>Foo</div>
           <div>Foo</div>
@@ -35,25 +37,28 @@ const Footer = () => {
           border={{ color: 'darkGrey', side: 'top' }}
           direction="row-responsive"
           justify="between"
-          pad={{ top: 'xlarge' }}
+          pad={{ top: 'large' }}
         >
-          <div>Foo</div>
-          <div>Foo</div>
-          <div>Foo</div>
-          <div>Foo</div>
-          <div>Foo</div>
+          {links.map(linkCollection =>
+            <LinkBox
+              key={linkCollection.title.text}
+              title={linkCollection.title}
+              links={linkCollection.links}
+            />
+          )}
         </Box>
       </Box>
 
       <Box
         background="lightGrey"
+        margin={{ top: 'xlarge' }}
         pad={{ horizontal: 'xlarge', vertical: 'large' }}
       >
         <Box direction="row-responsive" gap="large">
-          <StyledAnchor label={counterpart('Footer.privacyPolicy')} />
-          <StyledAnchor label={counterpart('Footer.jobs')} />
-          <StyledAnchor label={counterpart('Footer.systemStatus')} />
-          <StyledAnchor label={counterpart('Footer.security')} />
+          <StyledAnchor label={counterpart('Footer.lower.privacyPolicy')} />
+          <StyledAnchor label={counterpart('Footer.lower.jobs')} />
+          <StyledAnchor label={counterpart('Footer.lower.systemStatus')} />
+          <StyledAnchor label={counterpart('Footer.lower.security')} />
         </Box>
       </Box>
 
