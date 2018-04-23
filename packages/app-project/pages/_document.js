@@ -8,6 +8,7 @@ injectGlobal`
   body {
     font-size: 1.4rem;
     line-height: 1.214285714;
+    margin: 0;
   }
   p {
     margin: 0;
