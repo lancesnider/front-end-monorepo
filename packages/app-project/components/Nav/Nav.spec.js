@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import Nav from './nav';
+import Nav from './Nav';
 
-describe('Header', function () {
+describe('Nav', function () {
   it('should render without crashing', function () {
     shallow(<Nav />);
   });

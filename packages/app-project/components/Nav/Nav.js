@@ -1,4 +1,3 @@
-import Head from './head'
 import Link from 'next/link'
 import React from 'react'
 
