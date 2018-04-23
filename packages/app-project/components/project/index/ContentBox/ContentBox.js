@@ -22,6 +22,7 @@ const ContentBox = ({ children, title, linkUrl, linkText }) => {
   return (
     <Box
       border={{ color: 'lightGrey' }}
+      margin="medium"
       pad="large"
       tag="section"
     >
