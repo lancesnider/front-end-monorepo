@@ -1,13 +1,27 @@
-import React from 'react';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
-import Home from './Home';
-import './App.css';
+import React from 'react'
+import { Router, Link } from '@reach/router'
+import './App.css'
+
+let Home = () => (
+  <div>
+    <h1>Home</h1>
+
+  </div>
+)
+
+let Dash = () => <div>Dash</div>
 
 const App = () => (
-  <Switch>
-    <Route exact path="/" component={Home} />
-  </Switch>
-);
+  <div>
+    <nav>
+      <Link to='/'>Home</Link> |{' '}
+      <Link to='dashboard'>Dashboard</Link>
+    </nav>
+    <Router>
+      <Home path='/' />
+      <Dash path='dashboard' />
+    </Router>
+  </div>
+)
 
-export default App;
+export default App
