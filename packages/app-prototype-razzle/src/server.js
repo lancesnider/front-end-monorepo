@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router-dom'
 import express from 'express'
 import { renderToString } from 'react-dom/server'
 import { ServerLocation } from '@reach/router'
+import { ServerStyleSheet } from 'styled-components'
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST)
 
 const server = express()
@@ -12,11 +13,17 @@ server
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get('/*', (req, res) => {
     const context = {}
-    const markup = renderToString(
+
+    const Root = () => (
       <ServerLocation context={context} url={req.url}>
         <App />
       </ServerLocation>
     )
+
+    const sheet = new ServerStyleSheet()
+    const markup = renderToString(sheet.collectStyles(<Root />))
+    const styleTags = sheet.getStyleTags()
+
     if (context.url) {
       res.redirect(context.url)
     } else {
@@ -28,16 +35,15 @@ server
         <meta charset="utf-8" />
         <title>Welcome to Razzle</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        ${
-  assets.client.css
-    ? `<link rel="stylesheet" href="${assets.client.css}">`
-    : ''
-}
-        ${
-  process.env.NODE_ENV === 'production'
-    ? `<script src="${assets.client.js}" defer></script>`
-    : `<script src="${assets.client.js}" defer crossorigin></script>`
-}
+        ${assets.client.css
+          ? `<link rel="stylesheet" href="${assets.client.css}">`
+          : ''
+        }
+        ${process.env.NODE_ENV === 'production'
+          ? `<script src="${assets.client.js}" defer></script>`
+          : `<script src="${assets.client.js}" defer crossorigin></script>`
+        }
+        ${styleTags}
     </head>
     <body>
         <div id="root">${markup}</div>
