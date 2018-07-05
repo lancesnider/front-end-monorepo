@@ -1,9 +1,17 @@
 import React from 'react'
+import { inject, observer } from 'mobx-react'
 
-let Home = () => (
-  <div>
-    <h1>Home</h1>
-  </div>
-)
+@inject('store')
+@observer
+class Home extends React.Component {
+  render () {
+    console.info(this)
+    return (
+      <div>
+        <h1>Home</h1>
+      </div>
+    )
+  }
+}
 
 export default Home
