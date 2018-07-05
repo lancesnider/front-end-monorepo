@@ -1,4 +1,4 @@
-import App from './App'
+import App from './components/App'
 import React from 'react'
 import { StaticRouter } from 'react-router-dom'
 import express from 'express'
@@ -17,7 +17,6 @@ server
         <App />
       </ServerLocation>
     )
-
     if (context.url) {
       res.redirect(context.url)
     } else {

@@ -9,8 +9,7 @@ server.listen(process.env.PORT || 3000, error => {
   if (error) {
     console.log(error)
   }
-
-  console.log('🚀 started')
+  console.log('🚀  started')
 })
 
 if (module.hot) {
