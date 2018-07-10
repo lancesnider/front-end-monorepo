@@ -1,20 +1,28 @@
-import { types } from 'mobx-state-tree'
+import { getRoot, types } from 'mobx-state-tree'
 import layouts from '../helpers/layouts'
 import subjectViewers from '../helpers/subjectViewers'
 
 const Classifier = types
   .model('Classifier', {
-    layout: types.optional(types.enumeration('layout', layouts.values), layouts.default)
+    layout: types.optional(types.enumeration('layout', layouts.values), layouts.default),
+    isFieldGuideActive: types.optional(types.boolean, false)
   })
 
-  .actions(self => {
-    function setLayout (layout = layouts.DefaultLayout) {
+  .actions(self => ({
+    setLayout (layout = layouts.DefaultLayout) {
       self.layout = layout
-    }
+    },
 
-    return {
-      setLayout
+    showFieldGuide () {
+      const isFieldGuideAvailable = !!getRoot(self).fieldGuides.active.id
+      if (isFieldGuideAvailable) {
+        self.isFieldGuideActive = true
+      }
+    },
+
+    hideFieldGuide () {
+      self.isFieldGuideActive = false
     }
-  })
+  }))
 
 export default Classifier

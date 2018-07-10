@@ -12,7 +12,7 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
-    const id = '335'
+    const id = '3606'
     try {
       const response = await projects.get({ id })
       const project = response.body.projects[0]

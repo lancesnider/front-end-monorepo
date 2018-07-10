@@ -1,5 +1,6 @@
 import { getEnv, types } from 'mobx-state-tree'
 import ClassifierStore from './ClassifierStore'
+import FieldGuideStore from './FieldGuideStore'
 import ProjectStore from './ProjectStore'
 import SubjectStore from './SubjectStore'
 import WorkflowStore from './WorkflowStore'
@@ -7,6 +8,7 @@ import WorkflowStore from './WorkflowStore'
 const RootStore = types
   .model('RootStore', {
     classifier: types.optional(ClassifierStore, ClassifierStore.create()),
+    fieldGuides: types.optional(FieldGuideStore, FieldGuideStore.create()),
     projects: types.optional(ProjectStore, ProjectStore.create()),
     subjects: types.optional(SubjectStore, SubjectStore.create()),
     workflows: types.optional(WorkflowStore, WorkflowStore.create())

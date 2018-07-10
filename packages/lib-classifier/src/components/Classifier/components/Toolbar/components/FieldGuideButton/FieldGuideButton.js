@@ -1,9 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import helpIcon from './helpIcon'
 import { Box } from 'grommet'
-import WithHoverOrFocusProp from '../WithHoverOrFocusProp'
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
+
+import helpIcon from './helpIcon'
+import WithHoverOrFocusProp from '../../../WithHoverOrFocusProp'
 
 const StyledButton = styled.button`
   background: #00979D;
@@ -26,9 +28,33 @@ const StyledButton = styled.button`
   }
 `
 
+function storeMapper (stores) {
+  const classifier = stores.classifierStore.classifier
+  return {
+    classifier
+  }
+}
+
+@inject(storeMapper)
+@observer
 class FieldGuideButton extends React.Component {
-  onClick = () => {
-    console.info('Open field guide')
+  constructor () {
+    super()
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick () {
+    const {
+      fieldGuideActive,
+      hideFieldGuide,
+      showFieldGuide
+    } = this.props.classifier
+
+    if (fieldGuideActive) {
+      hideFieldGuide()
+    } else {
+      showFieldGuide()
+    }
   }
 
   render () {
