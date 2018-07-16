@@ -6,7 +6,7 @@ import { Provider } from 'mobx-react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './components/Home'
-import Dashboard from './components/Dashboard'
+import Project from './components/Project'
 import initStore from '../../stores'
 
 class App extends React.Component {
@@ -22,7 +22,7 @@ class App extends React.Component {
           <Nav />
           <Router>
             <Home path='/' />
-            <Dashboard path='dashboard' />
+            <Project path='/projects/:projectOwner/:projectSlug' />
           </Router>
           <Footer />
         </Grommet>

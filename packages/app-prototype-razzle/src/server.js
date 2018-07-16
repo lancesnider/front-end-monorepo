@@ -1,17 +1,21 @@
-import App from './components/App'
-import React from 'react'
-import { StaticRouter } from 'react-router-dom'
 import express from 'express'
-import { renderToString } from 'react-dom/server'
+import React from 'react'
 import { ServerLocation } from '@reach/router'
+import { renderToString } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom'
+import reactTreeWalker from 'react-tree-walker'
 import { ServerStyleSheet } from 'styled-components'
+
+import App from './components/App'
+
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST)
 
 const server = express()
+
 server
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', (req, res) => {
+  .get('/*', async (req, res) => {
     const context = {}
 
     const Root = () => (
@@ -23,6 +27,36 @@ server
     const sheet = new ServerStyleSheet()
     const markup = renderToString(sheet.collectStyles(<Root />))
     const styleTags = sheet.getStyleTags()
+
+
+    const values = []
+    let store
+
+    // You provide this! See the API docs below for full details.
+    function visitor(element, instance) {
+      if (instance && instance.store) {
+        console.info(instance.store)
+        store = instance.store
+      }
+
+      if (instance && typeof instance.getData === 'function') {
+        console.info('hit', instance)
+        return instance.getData().then(value => {
+          values.push(value)
+        })
+      }
+    }
+
+    await reactTreeWalker(Root(), visitor, {}, { componentWillUnmount: true })
+      .then(() => {
+        console.log('values:', values) // [1, 2, 3, 5];
+        console.info(store)
+        // Now is a good time to call React's renderToString whilst exposing
+        // whatever values you built up to your app.
+      })
+      // since v3.0.0 you need to do your own error handling!
+      .catch(err => console.error(err))
+
 
     if (context.url) {
       res.redirect(context.url)

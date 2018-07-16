@@ -4,7 +4,7 @@ import { Link } from '@reach/router'
 const Nav = () => (
   <nav>
     <Link to='/'>Home</Link> | {' '}
-    <Link to='dashboard'>Dashboard</Link>
+    <Link to='/projects/marcartro/amazonoil'>amazonoil</Link>
   </nav>
 )
 
