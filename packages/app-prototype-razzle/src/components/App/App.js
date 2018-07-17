@@ -7,22 +7,16 @@ import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './components/Home'
 import Project from './components/Project'
-import initStore from '../../stores'
 
 class App extends React.Component {
-  constructor (props) {
-    super(props)
-    this.store = initStore(props.isServer, props.initialState, props.client)
-  }
-
   render () {
     return (
-      <Provider store={this.store}>
+      <Provider store={this.props.store}>
         <Grommet>
           <Nav />
           <Router>
-            <Home path='/' />
             <Project path='/projects/:projectOwner/:projectSlug' />
+            <Home path='/' />
           </Router>
           <Footer />
         </Grommet>

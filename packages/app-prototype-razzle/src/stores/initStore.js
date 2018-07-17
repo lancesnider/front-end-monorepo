@@ -6,26 +6,18 @@ import {
 } from '@zooniverse/panoptes-js'
 import Store from './Store'
 
-let store = null
-
 const defaultClient = {
   panoptes: panoptesClient,
   projects: projectsClient
 }
 
-function initStore (isServer, snapshot = null, client = defaultClient) {
+function initStore (isServer, snapshot, client = defaultClient) {
   if (isServer) {
-    store = Store.create({}, { client })
+    return Store.create({}, { client })
   }
 
-  if (store === null) {
-    store = Store.create({}, { client })
-  }
-
-  if (snapshot) {
-    applySnapshot(store, snapshot)
-  }
-
+  const store = Store.create({}, { client })
+  applySnapshot(store, snapshot)
   makeInspectable(store)
   return store
 }

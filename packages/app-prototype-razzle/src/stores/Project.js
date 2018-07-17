@@ -8,7 +8,8 @@ const Project = types
     displayName: types.maybe(types.string),
     error: types.optional(types.frozen, null),
     id: types.maybe(numberString),
-    loadingState: types.optional(types.enumeration('state', asyncStates.values), asyncStates.initialized)
+    loadingState: types.optional(types.enumeration('state', asyncStates.values), asyncStates.initialized),
+    slug: types.maybe(types.string)
   })
 
   .actions(self => {
@@ -16,17 +17,19 @@ const Project = types
 
     return {
       afterAttach () {
-        client = getRoot(self).client.projects
+        client = getRoot(self).client
       },
 
       fetch: flow(function * fetch (slug) {
         self.loadingState = asyncStates.loading
         try {
-          const project = yield client.get({ query: { slug } })
+          const project = yield client.panoptes.get(`/projects`, { slug })
             .then(response => get(response, 'body.projects[0]'))
+          console.info('project fetch', project)
           self.displayName = project.display_name
           self.id = project.id
           self.loadingState = asyncStates.success
+          self.slug = project.slug
         } catch (error) {
           self.error = error.message
           self.loadingState = asyncStates.error

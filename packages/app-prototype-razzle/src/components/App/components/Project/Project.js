@@ -1,30 +1,40 @@
-import React from 'react'
 import { inject, observer } from 'mobx-react'
+import React from 'react'
 
 @inject('store')
 @observer
 class Project extends React.Component {
-  getData (isServer = false) {
-    console.info('fetching')
-    const { projectOwner, projectSlug } = this.props
+  async getData () {
+    const { projectOwner, projectSlug, store } = this.props
     const slug = `${projectOwner}/${projectSlug}`
-    this.props.store.project.fetch(slug)
-      .then(() => { console.info(this.props.store) })
+
+    if (store.project.slug !== slug) {
+      return store.project.fetch(slug)
+    }
+
+    return null
   }
 
   componentDidMount () {
-    this.getData()
+      // this.fetchProject()
+  }
+
+  componentDidUpdate () {
+    // this.fetchProject()
   }
 
   render () {
-    console.info(this.props)
+    const { project } = this.props.store
+    if (project.loadingState !== 'success') {
+      return (<div>Loading</div>)
+    }
+
     return (
       <div>
-        <h1>Dashboard</h1>
+        <h1>{project.displayName}</h1>
       </div>
     )
   }
 }
-
 
 export default Project
