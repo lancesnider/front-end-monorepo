@@ -5,6 +5,8 @@ import React from 'react'
 import zooTheme from '@zooniverse/grommet-theme'
 
 import ProjectCardImage from './components/ProjectCardImage'
+import LinkButton from './components/LinkButton'
+
 
 function ProjectCard ({ imageSrc, description, theme, title }) {
   return (
@@ -16,6 +18,7 @@ function ProjectCard ({ imageSrc, description, theme, title }) {
             border={{ side: 'bottom' }}
             margin={{ bottom: 'small' }}
             pad={{ bottom: 'small' }}
+            alignContent='start'
           >
             <SpacedText weight='bold' tag='h4'>
               {title}
@@ -25,6 +28,10 @@ function ProjectCard ({ imageSrc, description, theme, title }) {
           <Text margin='none' size='small'>
             {description}
           </Text>
+          <Box align='start'>
+            <LinkButton />
+          </Box>
+
         </Box>
       </Box>
     </Grommet>
