@@ -30,4 +30,5 @@ export { default as MediaCard } from './components/media-card'
 export { default as StepThrough } from './components/step-through'
 
 export { default as Modal } from './components/Modal'
+export { default as ProjectCard } from './components/ProjectCard'
 export { default as SpacedText } from './components/SpacedText'
