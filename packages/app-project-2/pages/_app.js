@@ -1,6 +1,7 @@
 import zooTheme from '@zooniverse/grommet-theme'
 import { Grommet } from 'grommet'
 import App, { Container } from 'next/app'
+import { ZooFooter, ZooHeader } from '@zooniverse/react-components'
 import React from 'react'
 
 export default class MyApp extends App {
@@ -19,7 +20,9 @@ export default class MyApp extends App {
     return (
       <Container>
         <Grommet theme={theme}>
+          <ZooHeader />
           <Component {...pageProps} />
+          <ZooFooter />
         </Grommet>
       </Container>
     )
