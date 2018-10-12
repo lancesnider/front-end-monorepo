@@ -8,6 +8,11 @@ import data from './data'
 
 class LightCurveViewerContainer extends Component {
 
+  getConfig () {
+    return {
+    }
+  }
+
   getData () {
     const { data } = this.props
     return {
@@ -21,9 +26,8 @@ class LightCurveViewerContainer extends Component {
     }
   }
 
-  getConfig () {
+  getLayout () {
     return {
-      displayModeBar: false
     }
   }
 
