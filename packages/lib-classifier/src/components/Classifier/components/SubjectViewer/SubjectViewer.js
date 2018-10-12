@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import getViewer from './helpers/getViewer'
+import LightCurveViewer from './components/LightCurveViewer'
+
 
 function storeMapper (stores) {
   const { active: subject, loadingState } = stores.classifierStore.subjects
@@ -38,8 +40,9 @@ class SubjectViewer extends React.Component {
   }
 
   render () {
-    const { loadingState } = this.props
-    return this[loadingState]() || null
+    // const { loadingState } = this.props
+    // return this[loadingState]() || null
+    return <LightCurveViewer />
   }
 }
 

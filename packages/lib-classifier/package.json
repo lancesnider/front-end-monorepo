@@ -80,7 +80,9 @@
     "cuid": "^2.1.4",
     "lodash": "^4.17.11",
     "mobx-utils": "^5.0.2",
+    "plotly.js": "^1.41.3",
     "react-context-props": "^2.2.0",
+    "react-plotly.js": "^2.2.0",
     "rxjs": "^6.3.3",
     "styled-theming": "^2.2.0",
     "valid-url": "^1.0.9"
