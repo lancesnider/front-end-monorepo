@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import InteractionLayer from '../InteractionLayer'
 
-import { VictoryChart, VictoryScatter, VictoryTheme } from 'victory'
+import { VictoryChart, VictoryScatter, VictoryTheme, VictoryZoomContainer } from 'victory'
 
 const SVG = styled.svg`
   height: 100%;
@@ -38,6 +38,7 @@ function SingleImageViewer ({ url }) {
   
   return (
     <VictoryChart
+      containerComponent={<VictoryZoomContainer zoomDimension="x"/>}
       theme={VictoryTheme.material}
       domain={{ x: [minX, maxX], y: [minY, maxY] }}
     >
