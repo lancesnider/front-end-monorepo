@@ -27,6 +27,8 @@ class LightCurveViewerContainer extends Component {
     const axisLength = width - 2 * margin
     const axisHeight = height - 2 * margin
 
+    // We're binding the context to `that` so we can use React state methods
+    // inside our event handlers
     const that = this
 
     const svgContainer = createContainer(this._rootNode, width, height)
@@ -85,9 +87,13 @@ class LightCurveViewerContainer extends Component {
       .attr('transform', `translate(${margin},${margin})`)
       .call(yAxis)
 
+    // Zipping data means combining `[0, 1, 2...]` and `[a, b, c...]` into a
+    // single array: `[[0, a], [1, b], [2, c]]`. This means we don't have to
+    // rely on index values inside our data accessors.
     const zippedData = _.zip(data.x, data.y)
 
-    const g1 = svgContainer.append('svg:g');
+    const g1 = svgContainer.append('svg:g')
+      .attr('class', 'points')
 
     g1.selectAll('.dot')
       .data(zippedData)
