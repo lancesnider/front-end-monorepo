@@ -6,6 +6,9 @@ import LightCurveViewer from './LightCurveViewer'
 import data from './data'
 
 import createContainer from './d3/createContainer'
+import getXFromEvent from './d3/getXFromEvent'
+import createPoints from './d3/createPoints'
+import createAnnotations from './d3/createAnnotations'
 
 class LightCurveViewerContainer extends Component {
   constructor() {
@@ -27,30 +30,20 @@ class LightCurveViewerContainer extends Component {
     const that = this
 
     const svgContainer = createContainer(this._rootNode, width, height)
-      .on("mousedown", mouseDown)
-      .on("mouseup", mouseUp)
-
-    function getXFromCoords (coords) {
-      return Math.round(xScale.invert(coords[0]))
-    }
+      .on('mousedown', mouseDown)
+      .on('mouseup', mouseUp)
 
     function mouseDown () {
       d3.event.preventDefault()
-      var coords = d3.mouse(this)
-      var newX = getXFromCoords(coords)
+      const newX = getXFromEvent(this, xScale)
       that.setState({ tempX1: newX })
       svgContainer.on('mousemove', mouseMove)
     }
 
     function mouseMove () {
       d3.event.preventDefault()
-      var coords = d3.mouse(this)
-      var newX = getXFromCoords(coords)
-
-      that.setState({
-        tempX2: newX
-      })
-
+      const newX = getXFromEvent(this, xScale)
+      that.setState({ tempX2: newX })
     }
 
     function mouseUp (e) {
@@ -59,16 +52,15 @@ class LightCurveViewerContainer extends Component {
       const { tempX1, tempX2 } = that.state
       const positive = tempX1 < tempX2
       const value = positive ? [tempX1, tempX2] : [tempX2, tempX1]
-      const newState = Object.assign({}, that.state)
-      newState.annotations.push(value)
-      newState.tempX1 = null
-      newState.tempX2 = null
+      const newState = Object.assign({}, that.state, {
+        annotations: that.state.annotations.concat([value]),
+        tempX1: null,
+        tempX2: null,
+      })
       that.setState(newState, () => {
         console.info(that.state)
         drawAnnotations()
       })
-
-
     }
 
     const xScale = d3.scaleLinear()
@@ -95,34 +87,21 @@ class LightCurveViewerContainer extends Component {
 
     const zippedData = _.zip(data.x, data.y)
 
-    var g1 = svgContainer.append('svg:g');
+    const g1 = svgContainer.append('svg:g');
 
     g1.selectAll('.dot')
       .data(zippedData)
       .enter()
-      .append('circle')
-        .attr('class', 'dot')
-        .attr('transform', `translate(${margin},${margin})`)
-        .attr('cx', d => xScale(d[0]))
-        .attr('cy', d => yScale(d[1]))
-        .attr('r', 2)
-        .style('fill', 'blue')
+      .call(createPoints, xScale, yScale, margin)
 
-    var g2 = svgContainer.append('svg:g');
+    const g2 = svgContainer.append('svg:g')
+      .attr('class', 'annotations')
 
     function drawAnnotations () {
       g2.selectAll('.annotation')
         .data(that.state.annotations)
         .enter()
-        .append('rect')
-        .attr('class', 'annotation')
-        .attr('transform', `translate(0,${margin})`)
-        .attr('x', d => xScale(d[0]))
-        .attr('y', 0)
-        .attr('height', axisHeight)
-        .attr('width', d => xScale(d[1]) - xScale(d[0]))
-        .style('fill', 'blue')
-        .style('opacity', 0.2)
+        .call(createAnnotations, xScale, axisHeight, margin)
     }
   }
 
