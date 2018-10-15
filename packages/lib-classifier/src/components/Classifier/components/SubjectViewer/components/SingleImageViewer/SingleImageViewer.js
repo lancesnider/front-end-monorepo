@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import InteractionLayer from '../InteractionLayer'
 
-import { VictoryChart, VictoryScatter, VictoryTheme, VictoryZoomContainer } from 'victory'
+import { VictoryChart, VictoryScatter, VictoryTheme, VictoryZoomContainer, createContainer } from 'victory'
 
 const SVG = styled.svg`
   height: 100%;
@@ -36,14 +36,16 @@ function SingleImageViewer ({ url }) {
     return { x, y }
   })
   
+  const SuperVictoryContainer = createContainer("zoom", "selection")
+
   return (
     <VictoryChart
-      containerComponent={<VictoryZoomContainer zoomDimension="x"/>}
+      containerComponent={<SuperVictoryContainer zoomDimension="x"/>}
       theme={VictoryTheme.material}
       domain={{ x: [minX, maxX], y: [minY, maxY] }}
     >
       <VictoryScatter
-        style={{ data: { fill: "#339999" } }}
+        style={{ data: { fill: (d, active) => active ? "#cc3333" : "#339999" } }}
         size={1}
         data={data}
       />
