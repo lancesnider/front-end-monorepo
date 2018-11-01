@@ -31,16 +31,18 @@ app.prepare()
         }
       }
 
-      if (!params.subroute) {
-        return renderPage('/Home')
-      }
+      if (params.owner && params.project) {
+        if (!params.subroute) {
+          return renderPage('/Home')
+        }
 
-      if (params.subroute && params.subroute[0] === 'classify') {
-        return renderPage('/Classify')
-      }
+        if (params.subroute && params.subroute[0] === 'classify') {
+          return renderPage('/Classify')
+        }
 
-      if (params.subroute && params.subroute[0] === 'about') {
-        return renderPage('/About')
+        if (params.subroute && params.subroute[0] === 'about') {
+          return renderPage('/About')
+        }
       }
 
       // Finally handle any non-matching routes
