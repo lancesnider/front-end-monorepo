@@ -19,7 +19,7 @@ const UserProjectPreferencesStore = types
     function createProjectObserver() {
       const projectDisposer = autorun(() => {
         const project = getRoot(self).projects.active
-        if (project) {
+        if (project && getRoot(self).authClient) {
           self.reset()
           self.createTempUPPOrFetchUPP()
         }

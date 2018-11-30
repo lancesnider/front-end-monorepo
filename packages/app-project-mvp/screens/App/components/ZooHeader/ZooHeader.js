@@ -36,7 +36,9 @@ export default function ZooHeader ({ isNarrow, menuLinks, isSignedIn, user }) {
       {isNarrow && (
         <>
           <Box {...commonBoxProps}>
-            <HomeLink />
+            <Box margin={{ vertical: 'small' }}>
+              <HomeLink />
+            </Box>
           </Box>
           <Box {...commonBoxProps} justify='end'>
             <UserOrLogin />
@@ -48,7 +50,9 @@ export default function ZooHeader ({ isNarrow, menuLinks, isSignedIn, user }) {
       {!isNarrow && (
         <>
           <Box {...commonBoxProps}>
-            <HomeLink />
+            <Box margin={{ vertical: 'small' }}>
+              <HomeLink />
+            </Box>
             <MenuLinksWide links={menuLinks} />
           </Box>
           <Box {...commonBoxProps} justify='end'>

@@ -1,5 +1,5 @@
 {
-  "name": "@zooniverse/fe-project",
+  "name": "@zooniverse/fe-project-mvp",
   "description": "Zooniverse front end app handling the classifier",
   "license": "Apache-2.0",
   "author": "Zooniverse <contact@zooniverse.org> (https://www.zooniverse.org/)",

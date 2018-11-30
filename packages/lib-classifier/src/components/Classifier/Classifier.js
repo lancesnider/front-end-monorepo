@@ -3,6 +3,7 @@ import { Provider } from 'mobx-react'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
+
 import {
   panoptes as panoptesClient,
   projects as projectsClient
@@ -20,14 +21,18 @@ const client = {
 
 // We don't register the queue service worker if background sync API is not available
 // We might want to move this check elsewhere once we add other service workers for other tasks
-if (isBackgroundSyncAvailable()) registerWorkers()
+// if (isBackgroundSyncAvailable()) registerWorkers()
 
 class Classifier extends React.Component {
   constructor (props) {
     super(props)
 
-    this.classifierStore = RootStore.create({}, { authClient: props.authClient, client })
+    this.classifierStore = RootStore.create({}, {
+      authClient: props.authClient,
+      client
+    })
     makeInspectable(this.classifierStore)
+    window.classifierStore = this.classifierStore
   }
 
   componentDidMount () {
@@ -43,7 +48,7 @@ class Classifier extends React.Component {
   }
 
   setProject (project) {
-    this.classifierStore.projects.setResource(project)
+    // this.classifierStore.projects.setResource(project)
     this.classifierStore.projects.setActive(project.id)
   }
 
@@ -54,6 +59,9 @@ class Classifier extends React.Component {
           <Layout />
         </ThemeProvider>
       </Provider>
+    )
+    return (
+      <div>Classifier!</div>
     )
   }
 }

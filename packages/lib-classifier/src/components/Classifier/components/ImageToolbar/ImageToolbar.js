@@ -10,6 +10,7 @@ import ZoomInButton from './components/ZoomInButton'
 import ZoomOutButton from './components/ZoomOutButton'
 
 const toolbarStyles = {
+  background: 'white',
   border: {
     color: 'lightGrey',
     side: 'all'

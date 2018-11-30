@@ -18,9 +18,9 @@ export const StyledAnchor = styled(Anchor)`
   }
 `
 
-function HomeLink () {
+export default function HomeLink ({ href }) {
   return (
-    <Link href='/'>
+    <Link href={href}>
       <StyledAnchor>
         <ZooniverseLogo
           fill={zooTheme.global.colors.headerGrey}
@@ -30,4 +30,10 @@ function HomeLink () {
   )
 }
 
-export default HomeLink
+HomeLink.propTypes = {
+  href: PropTypes.string
+}
+
+HomeLink.defaultProps = {
+  href: '/'
+}

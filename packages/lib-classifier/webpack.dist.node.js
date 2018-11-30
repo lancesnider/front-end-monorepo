@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const EnvironmentWebpackPlugin = new webpack.EnvironmentPlugin({
   DEBUG: false,
@@ -8,12 +7,8 @@ const EnvironmentWebpackPlugin = new webpack.EnvironmentPlugin({
   PANOPTES_ENV: 'production'
 })
 
-const WorkboxPluginConfig = new WorkboxPlugin.InjectManifest({
-  swSrc: './src/workers/queue.js'
-})
-
 module.exports = {
-  entry: './src/components/Classifier/index.js',
+  entry: './src/index.node.js',
   mode: 'production',
   module: {
     rules: [
@@ -26,14 +21,12 @@ module.exports = {
   },
   output: {
     path: path.resolve('dist'),
-    filename: 'main.js',
+    filename: 'main.node.js',
     library: '@zooniverse/classifier',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    libraryTarget: 'commonjs2'
   },
   plugins: [
     EnvironmentWebpackPlugin,
-    WorkboxPluginConfig
   ],
   resolve: {
     modules: [
