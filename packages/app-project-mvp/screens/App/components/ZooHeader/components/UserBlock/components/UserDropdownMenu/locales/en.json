@@ -1,0 +1,9 @@
+{
+  "UserDropdownMenu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "collections": "Collections",
+    "favorites": "Favorites",
+    "signOut": "Sign out"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "collections": "/collections",
+  "favorites": "/favorites",
+  "profile": "/profile",
+  "settings": "/settings",
+  "signOut": "/sign-out"
+}

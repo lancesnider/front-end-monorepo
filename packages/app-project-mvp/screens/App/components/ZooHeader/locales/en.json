@@ -1,0 +1,11 @@
+{
+  "ZooHeader": {
+    "mainMenuLinks": {
+      "about": "About",
+      "build": "Build",
+      "getInvolved": "Get Involved",
+      "projects": "Projects",
+      "talk": "Talk"
+    }
+  }
+}
