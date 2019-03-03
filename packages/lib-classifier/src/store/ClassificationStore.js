@@ -34,6 +34,11 @@ const ClassificationStore = types
       return new ClassificationQueue(client, self.onClassificationSaved)
     }
   }))
+  .volatile(self => {
+    return {
+      onComplete: () => null
+    }
+  })
   .actions(self => {
     function afterAttach () {
       createSubjectObserver()
@@ -69,7 +74,7 @@ const ClassificationStore = types
             finished_workflow: subject.finished_workflow,
             retired: subject.retired,
             selection_state: subject.selection_state,
-            user_has_finished_workflow: subject.user_has_finished_workflow,
+            user_has_finished_workflow: subject.user_has_finished_workflow
           },
           userLanguage: counterpart.getLocale(),
           workflowVersion: workflow.version
@@ -149,6 +154,9 @@ const ClassificationStore = types
       })
       classificationToSubmit.metadata = convertedMetadata
 
+      const subject = getRoot(self).subjects.active
+      self.onComplete(classification.toJSON(), subject.toJSON())
+
       console.log('Completed classification', classificationToSubmit)
       self.submitClassification(classificationToSubmit)
     }
@@ -158,29 +166,19 @@ const ClassificationStore = types
     }
 
     function * submitClassification (classification) {
-      console.log('Saving classification')
-      const root = getRoot(self)
-      const client = root.client.panoptes
       self.loadingState = asyncStates.posting
 
-      if (!isServiceWorkerAvailable() || !isBackgroundSyncAvailable()) {
-        // Use fallback queuing class
-        self.classificationQueue.add(classification)
-      } else {
-        try {
-          const response = yield client.post(`/${self.type}`, { classifications: classification })
-          if (response.ok) {
-            const savedClassification = response.body.classifications[0]
-            console.log(`Saved classification ${savedClassification.id}`)
-            // TODO: instead of callback here, let's add a Split store that uses an observer
-            self.onClassificationSaved(savedClassification)
-            self.loadingState = asyncStates.success
-          }
-        } catch (error) {
-          console.error(error)
-          self.loadingState = asyncStates.error
-        }
+      // Service worker isn't working right now, so let's use the fallback queue for all browsers
+      try {
+        yield self.classificationQueue.add(classification)
+      } catch (error) {
+        console.error(error)
+        self.loadingState = asyncStates.error
       }
+    }
+
+    function setOnComplete(onComplete) {
+      self.onComplete = onComplete
     }
 
     return {
@@ -191,6 +189,7 @@ const ClassificationStore = types
       createDefaultAnnotation,
       onClassificationSaved,
       removeAnnotation,
+      setOnComplete,
       submitClassification: flow(submitClassification),
       updateClassificationMetadata
     }

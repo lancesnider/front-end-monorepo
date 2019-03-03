@@ -12,6 +12,8 @@ const TutorialStore = types
     activeStep: types.maybe(types.integer),
     attachedMedia: types.map(Medium),
     resources: types.map(Tutorial),
+    tutorialSeenTime: types.maybe(types.string),
+    miniCourseSeenTime: types.maybe(types.string),
     type: types.optional(types.string, 'tutorials')
   })
 
@@ -63,6 +65,7 @@ const TutorialStore = types
         const workflow = getRoot(self).workflows.active
         if (workflow) {
           self.reset()
+          self.resetSeen()
           self.fetchTutorials()
         }
       })
@@ -76,10 +79,11 @@ const TutorialStore = types
         try {
           const response = yield tutorials.getAttachedImages({ id: tutorial.id })
           const { media } = response.body
-          self.setMediaResources(media)
+          if (media && media.length > 0) self.setMediaResources(media)
         } catch (error) {
+          // We're not setting the store state to error because
+          // we do not want to prevent the tutorial from rendering
           console.error(error)
-          self.loadingState = asyncStates.error
         }
       }
     }
@@ -91,13 +95,12 @@ const TutorialStore = types
     // This could use a refactor after Panoptes bug with using include to get attached images is fixed
     // See comments in the commonRequests.js file for tutorials in panoptes.js
     function * fetchTutorials () {
-      const { type } = self
       const workflow = getRoot(self).workflows.active
-      const { panoptes } = getRoot(self).client
+      const tutorialsClient = getRoot(self).client.tutorials
       self.loadingState = asyncStates.loading
       try {
-        const response = yield panoptes.get(`/${type}`, { workflow_id: workflow.id })
-        const tutorials = response.body[type]
+        const response = yield tutorialsClient.get({ workflowId: workflow.id })
+        const { tutorials } = response.body
         if (tutorials && tutorials.length > 0) {
           tutorials.forEach(tutorial => self.fetchMedia(tutorial))
           self.setTutorials(tutorials)
@@ -114,11 +117,13 @@ const TutorialStore = types
     }
 
     function setTutorialStep (stepIndex = 0) {
-      const { steps } = self.active
-      self.activeMedium = undefined
-      if (!!steps && !!steps[stepIndex]) {
-        if (steps[stepIndex].media) self.activeMedium = steps[stepIndex].media
-        self.activeStep = stepIndex
+      if (self.active) {
+        const { steps } = self.active
+        self.activeMedium = undefined
+        if (stepIndex < steps.length) {
+          self.activeStep = stepIndex
+          if (steps[stepIndex].media) self.activeMedium = steps[stepIndex].media
+        }
       }
     }
 
@@ -127,6 +132,21 @@ const TutorialStore = types
 
       self.active = id
       self.setTutorialStep(stepIndex)
+      self.setSeenTime()
+    }
+
+    function setSeenTime () {
+      const tutorial = self.active
+      const seen = new Date().toISOString()
+      if (tutorial) {
+        if (tutorial.kind === 'tutorial' || tutorial.kind === null) {
+          self.tutorialSeenTime = seen
+        }
+
+        if (tutorial.kind === 'mini-course') {
+          self.miniCourseSeenTime = seen
+        }
+      }
     }
 
     function resetActiveTutorial () {
@@ -135,13 +155,26 @@ const TutorialStore = types
       self.activeMedium = undefined
     }
 
+    function resetSeen (type) {
+      if (type === 'tutorial') {
+        self.tutorialSeenTime = undefined
+      } else if (type === 'mini-course') {
+        self.miniCourseSeenTime = undefined
+      } else {
+        self.tutorialSeenTime = undefined
+        self.miniCourseSeenTime = undefined
+      }
+    }
+
     return {
       afterAttach,
       fetchMedia: flow(fetchMedia),
       fetchTutorials: flow(fetchTutorials),
-      setActiveTutorial,
       resetActiveTutorial,
+      resetSeen,
+      setActiveTutorial,
       setMediaResources,
+      setSeenTime,
       setTutorialStep,
       setTutorials
     }

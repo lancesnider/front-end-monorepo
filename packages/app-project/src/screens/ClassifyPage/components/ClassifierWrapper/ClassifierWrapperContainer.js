@@ -7,21 +7,25 @@ import asyncStates from '@zooniverse/async-states'
 import ErrorMessage from './components/ErrorMessage'
 
 function storeMapper (stores) {
-  const { project, user } = stores.store
+  const { project, recents, user } = stores.store
+  const { mode } = stores.store.ui
   // We return a POJO here, as the `project` resource is also stored in a
   // `mobx-state-tree` store in the classifier and an MST node can't be in two
   // stores at the same time.
   return {
+    mode,
     project: project.toJSON(),
+    recents,
     user
   }
 }
 
 @inject(storeMapper)
 @observer
-export default class ClassifierWrapperContainer extends Component {
+class ClassifierWrapperContainer extends Component {
   constructor () {
     super()
+    this.onCompleteClassification = this.onCompleteClassification.bind(this)
     this.state = {
       error: null
     }
@@ -33,8 +37,16 @@ export default class ClassifierWrapperContainer extends Component {
     }
   }
 
+  onCompleteClassification (classification, subject) {
+    const { recents } = this.props
+    recents.add({
+      subjectId: subject.id,
+      locations: subject.locations
+    })
+  }
+
   render () {
-    const { authClient, project, user } = this.props
+    const { authClient, mode, project, user } = this.props
     const somethingWentWrong = this.state.error || project.loadingState === asyncStates.error
 
     if (somethingWentWrong) {
@@ -56,8 +68,10 @@ export default class ClassifierWrapperContainer extends Component {
       const key = user.id || 'no-user'
       return (
         <Classifier
-          key={key}
           authClient={authClient}
+          key={key}
+          mode={mode}
+          onCompleteClassification={this.onCompleteClassification}
           project={project}
         />
       )
@@ -71,9 +85,11 @@ export default class ClassifierWrapperContainer extends Component {
 
 ClassifierWrapperContainer.propTypes = {
   authClient: shape({}),
-  project: shape({}),
+  project: shape({})
 }
 
 ClassifierWrapperContainer.defaultProps = {
   authClient: auth
 }
+
+export default ClassifierWrapperContainer
